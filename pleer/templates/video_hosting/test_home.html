@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Главная</title>
+    <link rel="stylesheet" href="styles.css">
+
+    <style>
+       /* Общие стили */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+}
+
+/* Стили для хедера */
+header {
+    background-color: #e02c1f;
+    color: white;
+    padding: 1rem 0;
+}
+
+nav ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+}
+
+nav ul li {
+    margin: 0 0.5rem; /* Уменьшаем отступы между элементами меню */
+}
+
+nav ul li a {
+    color: white;
+    text-decoration: none;
+    font-size: 1.2rem; /* Устанавливаем начальный размер текста */
+    transition: color 0.3s ease; /* Добавляем плавный переход цвета */
+}
+
+nav ul li a:hover {
+    color: #ccc; /* Меняем цвет текста при наведении */
+    text-decoration: none; /* Удаляем подчеркивание текста при наведении */
+    text-shadow: 0 0 5px #ccc; /* Добавляем легкое свечение текста при наведении */
+}
+
+/* Стили для основного контента */
+main {
+    
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.video-block {
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    
+    padding: 1rem;
+    max-width: 70%;
+    width: 100%;
+}
+
+.video-block h2 {
+    margin-top: 0;
+    font-size: 1.5rem;
+    color: #333;
+}
+/* position: absolute; */
+/* Стили для тега video */
+.video-js {
+    width: 100%;
+    height: 100%;
+	position: absolute;
+}
+
+/* Стили для контейнера видео */
+.video-container {
+    position: relative;
+    padding-bottom: 56.25%; /* 16:9 */
+    height: 0;
+    margin-top: 1rem;
+    overflow: hidden; /* Добавлено, чтобы скрыть все, что выходит за пределы контейнера */
+}
+
+/* Стили для кнопки "Смотреть" */
+.watch-button {
+    background-color: red;
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    font-size: 1rem;
+    cursor: pointer;
+    border-radius: 4px;
+    margin-top: 1rem;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.watch-button-link {
+    text-decoration: none;
+  }
+
+@media (max-width: 768px) {
+    /* Стили для ссылок меню */
+    nav ul li a {
+        font-size: 1rem; /* Уменьшаем размер текста при уменьшении экрана */
+    }
+
+ 
+	
+    .video-block {
+        width: 100%; 
+		height: 700px; 
+		object-fit: cover; 
+		object-position: bottom; 
+    }
+	
+
+    .video-block h2 {
+        background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    
+    padding: 1rem;
+    max-width: 70%;
+    width: 100%;
+    }
+
+    .video-container {
+        width: 100%; 
+		height: 450px; 
+		object-fit: cover; 
+		object-position: bottom; 
+    
+		/* height: 0; */
+		margin-top: 1rem;
+		overflow: hidden;
+    }
+    a {
+		object-position: bottom;
+        text-decoration: none;
+        
+    }
+
+    .watch-button {
+        font-size: 0.8rem;
+        padding: 0.4rem 0.8rem;
+        
+    }
+}
+
+    </style>
+</head>
+<body>
+<header>
+    <nav>
+        <ul>
+            {% url 'home' as url_home %}
+            <li><a href="{{url_home}}">Главная</a></li>
+            {% if request.user.is_authenticated %}
+                
+                {% url 'createmusic' as url_createmusic %}
+                <li><a href="{{ url_createmusic }}">Создание</a></li>
+                <li><a href="/message/inbox/">Чат</a></li>
+                <li><a href="/profile/{{ user.username }}">Профиль</a></li>
+                {% url 'logout' as url_logout %}
+                <li><a href="{{url_logout}}">Выйти</a></li>
+			
+            {% else %}
+                {% url 'login' as url_login %}
+            <li><a href="{{ url_login }}">Авторизация</a></li>
+                {% url 'register' as url_register %}
+            <li><a href="{{ url_register }}">Регистрация</a></li>
+            {% endif %}
+        </ul>
+    </nav>
+</header>
+<main>
+    {% for v in video_list %}
+    <section class="video-block">
+        <div class="video-container">
+            <video autoplay loop id="my-video" class="video-js" data-setup="{}">
+                <source src="{% url 'stream' v.id %}" type="video/webm">
+            </video>
+        </div>
+        <a class="watch-button-link" href="{% url 'stream' v.id %}"><button class="watch-button">Смотреть</button></a>
+    </section>
+    {% endfor %}
+</main>
+</body>
+</html>
