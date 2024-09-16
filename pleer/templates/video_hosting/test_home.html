@@ -109,8 +109,8 @@ main {
     width: 50vh;
     height: 100%;
 	position: absolute;
-    object-fit: fill;
     border-radius: 15px;
+    object-fit: fill;
 }
 
 /* Стили для контейнера видео */
@@ -258,10 +258,14 @@ main {
     .navigation {
         display: none;
     }
+
+    .object-fit-contain {
+        object-fit: contain;
+    }
 }
 
-@media screen and (orientation:portrait) {
-    .video-js{
+@media (max-width: 768px) and (orientation:portrait) {
+    .object-fit-cover {
         object-fit: cover;
     }
 }
@@ -299,17 +303,17 @@ main {
             <div class="swiper-wrapper">
               <!-- Slides -->
                 <div class="swiper-slide"> 
-                    <video loop class="video-js" muted=true>
+                    <video loop class="video-js object-fit-cover" muted=true>
                         <source src="{% url 'stream' v.id %}" type="video/webm">
                     </video>
                 </div>
                 <div class="swiper-slide">
-                    <video loop class="video-js" muted=true>
+                    <video loop class="video-js object-fit-contain" muted=true>
                         <source src="../../media/video/0H4A5580.mp4" type="video/mp4">
                     </video>
                 </div>
                 <div class="swiper-slide">
-                    <video loop class="video-js" muted=true>
+                    <video loop class="video-js object-fit-cover" muted=true>
                         <source src="../../media/video/0H4A5583.mp4" type="video/mp4">
                     </video>
                 </div>
